@@ -15,18 +15,22 @@ $nama_barang = ["Kopi", "Teh", "Gula", "Susu", "Roti"];
 $harga_barang = [15000, 10000, 12000, 20000, 8000];
 
 // ====== Logika Penjualan Random ======
-$beli = [];      // Barang yang dibeli
-$jumlah = [];    // Jumlah pembelian per barang
+$beli = [];      // Nama barang yang dibeli
+$jumlah = [];    // Jumlah barang dibeli
 $total = [];     // Total harga per barang
-$grandtotal = 0; // Total keseluruhan (nanti dipakai di commit selanjutnya)
+$grandtotal = 0; // Total keseluruhan belanja
 
 // Simulasikan pembelian 3 barang random
 for ($i = 0; $i < 3; $i++) {
-    $index = rand(0, count($kode_barang) - 1); // Pilih index barang acak
+    $index = rand(0, count($kode_barang) - 1); // Index acak
     $beli[] = $nama_barang[$index];
     $jumlah_beli = rand(1, 5); // Jumlah acak 1–5
     $jumlah[] = $jumlah_beli;
-    $total[] = $harga_barang[$index] * $jumlah_beli;
+    $harga_satuan = $harga_barang[$index];
+    $total_harga = $harga_satuan * $jumlah_beli;
+    $total[] = $total_harga;
+
+    $grandtotal += $total_harga; // Akumulasi total belanja
 }
 ?>
 
@@ -86,6 +90,10 @@ for ($i = 0; $i < 3; $i++) {
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+        .total-row {
+            font-weight: bold;
+            background-color: #e9ecef;
+        }
     </style>
 </head>
 <body>
@@ -98,7 +106,7 @@ for ($i = 0; $i < 3; $i++) {
     </header>
 
     <div class="container">
-        <h3>Simulasi Penjualan (Random)</h3>
+        <h3>Detail Pembelian (Menggunakan Foreach)</h3>
         <table>
             <tr>
                 <th>No</th>
@@ -108,20 +116,24 @@ for ($i = 0; $i < 3; $i++) {
                 <th>Total Harga (Rp)</th>
             </tr>
             <?php
-            for ($i = 0; $i < count($beli); $i++) {
-                // Cari harga satuan dari array asli berdasarkan nama
-                $index_barang = array_search($beli[$i], $nama_barang);
-                $harga_satuan = $harga_barang[$index_barang];
+            $no = 1;
+            foreach ($beli as $key => $nama) {
+                // Cari harga satuan berdasarkan index yang sama
+                $harga_satuan = $total[$key] / $jumlah[$key];
 
                 echo "<tr>";
-                echo "<td>" . ($i + 1) . "</td>";
-                echo "<td>{$beli[$i]}</td>";
-                echo "<td>{$jumlah[$i]}</td>";
+                echo "<td>" . $no++ . "</td>";
+                echo "<td>{$nama}</td>";
+                echo "<td>{$jumlah[$key]}</td>";
                 echo "<td>" . number_format($harga_satuan, 0, ',', '.') . "</td>";
-                echo "<td>" . number_format($total[$i], 0, ',', '.') . "</td>";
+                echo "<td>" . number_format($total[$key], 0, ',', '.') . "</td>";
                 echo "</tr>";
             }
             ?>
+            <tr class="total-row">
+                <td colspan="4">Grand Total</td>
+                <td><?php echo number_format($grandtotal, 0, ',', '.'); ?></td>
+            </tr>
         </table>
     </div>
 </body>
