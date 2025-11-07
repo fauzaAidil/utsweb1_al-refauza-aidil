@@ -13,6 +13,21 @@ $username = $_SESSION['username'];
 $kode_barang = ["BRG001", "BRG002", "BRG003", "BRG004", "BRG005"];
 $nama_barang = ["Kopi", "Teh", "Gula", "Susu", "Roti"];
 $harga_barang = [15000, 10000, 12000, 20000, 8000];
+
+// ====== Logika Penjualan Random ======
+$beli = [];      // Barang yang dibeli
+$jumlah = [];    // Jumlah pembelian per barang
+$total = [];     // Total harga per barang
+$grandtotal = 0; // Total keseluruhan (nanti dipakai di commit selanjutnya)
+
+// Simulasikan pembelian 3 barang random
+for ($i = 0; $i < 3; $i++) {
+    $index = rand(0, count($kode_barang) - 1); // Pilih index barang acak
+    $beli[] = $nama_barang[$index];
+    $jumlah_beli = rand(1, 5); // Jumlah acak 1–5
+    $jumlah[] = $jumlah_beli;
+    $total[] = $harga_barang[$index] * $jumlah_beli;
+}
 ?>
 
 <!DOCTYPE html>
@@ -83,20 +98,27 @@ $harga_barang = [15000, 10000, 12000, 20000, 8000];
     </header>
 
     <div class="container">
-        <h3>Daftar Produk POLGAN MART</h3>
+        <h3>Simulasi Penjualan (Random)</h3>
         <table>
             <tr>
-                <th>Kode Barang</th>
+                <th>No</th>
                 <th>Nama Barang</th>
-                <th>Harga (Rp)</th>
+                <th>Jumlah</th>
+                <th>Harga Satuan (Rp)</th>
+                <th>Total Harga (Rp)</th>
             </tr>
             <?php
-            // Tampilkan produk dari array
-            for ($i = 0; $i < count($kode_barang); $i++) {
+            for ($i = 0; $i < count($beli); $i++) {
+                // Cari harga satuan dari array asli berdasarkan nama
+                $index_barang = array_search($beli[$i], $nama_barang);
+                $harga_satuan = $harga_barang[$index_barang];
+
                 echo "<tr>";
-                echo "<td>{$kode_barang[$i]}</td>";
-                echo "<td>{$nama_barang[$i]}</td>";
-                echo "<td>" . number_format($harga_barang[$i], 0, ',', '.') . "</td>";
+                echo "<td>" . ($i + 1) . "</td>";
+                echo "<td>{$beli[$i]}</td>";
+                echo "<td>{$jumlah[$i]}</td>";
+                echo "<td>" . number_format($harga_satuan, 0, ',', '.') . "</td>";
+                echo "<td>" . number_format($total[$i], 0, ',', '.') . "</td>";
                 echo "</tr>";
             }
             ?>
