@@ -1,3 +1,37 @@
+<?php
+session_start();
+
+// Jika user sudah login, langsung arahkan ke dashboard
+if (isset($_SESSION['username'])) {
+    header("Location: dashboard.php");
+    exit;
+}
+
+// Variabel untuk pesan error
+$error = "";
+
+// Jika form dikirim (tombol login ditekan)
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    // Data login statis
+    $user_valid = "admin";
+    $pass_valid = "1234";
+
+    // Cek kecocokan username & password
+    if ($username === $user_valid && $password === $pass_valid) {
+        // Simpan username ke session
+        $_SESSION['username'] = $username;
+        header("Location: dashboard.php");
+        exit;
+    } else {
+        // Jika salah, tampilkan pesan error
+        $error = "Username atau password salah!";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,12 +77,18 @@
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
+        .error {
+            color: red;
+            text-align: center;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="login-box">
         <h2>Login POLGAN MART</h2>
-        <form action="dashboard.php" method="POST">
+        <?php if ($error) echo "<p class='error'>$error</p>"; ?>
+        <form action="" method="POST">
             <label>Username</label>
             <input type="text" name="username" placeholder="Masukkan Username" required>
             <label>Password</label>
