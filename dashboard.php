@@ -1,13 +1,18 @@
 <?php
 session_start();
 
-// Jika belum login, kembalikan ke halaman login
+// Cek login
 if (!isset($_SESSION['username'])) {
     header("Location: index.php");
     exit;
 }
 
 $username = $_SESSION['username'];
+
+// ====== Array Produk ======
+$kode_barang = ["BRG001", "BRG002", "BRG003", "BRG004", "BRG005"];
+$nama_barang = ["Kopi", "Teh", "Gula", "Susu", "Roti"];
+$harga_barang = [15000, 10000, 12000, 20000, 8000];
 ?>
 
 <!DOCTYPE html>
@@ -34,9 +39,6 @@ $username = $_SESSION['username'];
         header h2 {
             margin: 0;
         }
-        .container {
-            padding: 20px;
-        }
         .logout-btn {
             background-color: #dc3545;
             color: white;
@@ -48,6 +50,26 @@ $username = $_SESSION['username'];
         }
         .logout-btn:hover {
             background-color: #c82333;
+        }
+        .container {
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
         }
     </style>
 </head>
@@ -61,8 +83,24 @@ $username = $_SESSION['username'];
     </header>
 
     <div class="container">
-        <h3>Selamat datang di sistem penjualan, <?php echo htmlspecialchars($username); ?>!</h3>
-        <p>Fitur penjualan akan dikembangkan pada commit berikutnya.</p>
+        <h3>Daftar Produk POLGAN MART</h3>
+        <table>
+            <tr>
+                <th>Kode Barang</th>
+                <th>Nama Barang</th>
+                <th>Harga (Rp)</th>
+            </tr>
+            <?php
+            // Tampilkan produk dari array
+            for ($i = 0; $i < count($kode_barang); $i++) {
+                echo "<tr>";
+                echo "<td>{$kode_barang[$i]}</td>";
+                echo "<td>{$nama_barang[$i]}</td>";
+                echo "<td>" . number_format($harga_barang[$i], 0, ',', '.') . "</td>";
+                echo "</tr>";
+            }
+            ?>
+        </table>
     </div>
 </body>
 </html>
