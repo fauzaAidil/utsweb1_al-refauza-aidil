@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Cek login
+// Pastikan user sudah login
 if (!isset($_SESSION['username'])) {
     header("Location: index.php");
     exit;
@@ -15,22 +15,21 @@ $nama_barang = ["Kopi", "Teh", "Gula", "Susu", "Roti"];
 $harga_barang = [15000, 10000, 12000, 20000, 8000];
 
 // ====== Logika Penjualan Random ======
-$beli = [];      // Nama barang yang dibeli
-$jumlah = [];    // Jumlah barang dibeli
-$total = [];     // Total harga per barang
-$grandtotal = 0; // Total keseluruhan belanja
+$beli = [];
+$jumlah = [];
+$total = [];
+$grandtotal = 0;
 
 // Simulasikan pembelian 3 barang random
 for ($i = 0; $i < 3; $i++) {
-    $index = rand(0, count($kode_barang) - 1); // Index acak
+    $index = rand(0, count($kode_barang) - 1);
     $beli[] = $nama_barang[$index];
-    $jumlah_beli = rand(1, 5); // Jumlah acak 1–5
+    $jumlah_beli = rand(1, 5);
     $jumlah[] = $jumlah_beli;
     $harga_satuan = $harga_barang[$index];
     $total_harga = $harga_satuan * $jumlah_beli;
     $total[] = $total_harga;
-
-    $grandtotal += $total_harga; // Akumulasi total belanja
+    $grandtotal += $total_harga;
 }
 ?>
 
@@ -94,6 +93,17 @@ for ($i = 0; $i < 3; $i++) {
             font-weight: bold;
             background-color: #e9ecef;
         }
+        .summary {
+            margin-top: 20px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        .summary h4 {
+            margin: 0;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -106,7 +116,7 @@ for ($i = 0; $i < 3; $i++) {
     </header>
 
     <div class="container">
-        <h3>Detail Pembelian (Menggunakan Foreach)</h3>
+        <h3>Detail Pembelian</h3>
         <table>
             <tr>
                 <th>No</th>
@@ -118,9 +128,7 @@ for ($i = 0; $i < 3; $i++) {
             <?php
             $no = 1;
             foreach ($beli as $key => $nama) {
-                // Cari harga satuan berdasarkan index yang sama
                 $harga_satuan = $total[$key] / $jumlah[$key];
-
                 echo "<tr>";
                 echo "<td>" . $no++ . "</td>";
                 echo "<td>{$nama}</td>";
@@ -135,6 +143,10 @@ for ($i = 0; $i < 3; $i++) {
                 <td><?php echo number_format($grandtotal, 0, ',', '.'); ?></td>
             </tr>
         </table>
+
+        <div class="summary">
+            <h4>Total Belanja Anda: <span style="color:#007bff;"><?php echo "Rp " . number_format($grandtotal, 0, ',', '.'); ?></span></h4>
+        </div>
     </div>
 </body>
 </html>
