@@ -31,6 +31,18 @@ for ($i = 0; $i < 3; $i++) {
     $total[] = $total_harga;
     $grandtotal += $total_harga;
 }
+
+// ====== Perhitungan Diskon ======
+if ($grandtotal < 50000) {
+    $diskon_persen = 5;
+} elseif ($grandtotal <= 100000) {
+    $diskon_persen = 10;
+} else {
+    $diskon_persen = 15;
+}
+
+$jumlah_diskon = $grandtotal * ($diskon_persen / 100);
+$total_akhir = $grandtotal - $jumlah_diskon;
 ?>
 
 <!DOCTYPE html>
@@ -101,7 +113,7 @@ for ($i = 0; $i < 3; $i++) {
             box-shadow: 0 0 5px rgba(0,0,0,0.1);
         }
         .summary h4 {
-            margin: 0;
+            margin: 8px 0;
             color: #333;
         }
     </style>
@@ -145,7 +157,9 @@ for ($i = 0; $i < 3; $i++) {
         </table>
 
         <div class="summary">
-            <h4>Total Belanja Anda: <span style="color:#007bff;"><?php echo "Rp " . number_format($grandtotal, 0, ',', '.'); ?></span></h4>
+            <h4>Total Belanja: Rp <?php echo number_format($grandtotal, 0, ',', '.'); ?></h4>
+            <h4>Diskon (<?php echo $diskon_persen; ?>%): Rp <?php echo number_format($jumlah_diskon, 0, ',', '.'); ?></h4>
+            <h4><strong>Total Akhir: Rp <?php echo number_format($total_akhir, 0, ',', '.'); ?></strong></h4>
         </div>
     </div>
 </body>
